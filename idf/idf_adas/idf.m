@@ -4,8 +4,6 @@ close all
 load('../idf_full2.mat')
 load('copt_pend.mat')
 copt_pend = copt;
-load('copt_cart.mat')
-copt_cart = copt;
 
 % Initial coefficients
 M = 0.355;
@@ -40,11 +38,13 @@ options = optimset('display', 'iter', 'maxiter', 1000);
 rhsc = @(c) qdiff2_c(rhs, c, time, [cart(1); 0; pend(1); 0], [cart pend]);
 copt = lsqnonlin(rhsc, copt, lb, ub, options);
 x = solve_c(rhs, copt, time, [cart(1); 0; pend(1); 0]);
+M = copt(1);
+a = copt(2);
 
 figure
 plot(time, x(:,1), time, cart)
 figure
 plot(time, x(:,3), time, pend)
 
-
-
+clear cart copt copt_pend idf_full2 lb ub options pend rhs rhsc time x
+save('_pendulum_parameters.mat')
