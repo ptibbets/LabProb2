@@ -1,6 +1,6 @@
 model_prep
 
-x_0 = [0 0 1 0];
+x_0 = [0 0 0.1 0];
 sim('model_ver_model')
 
 c = [M a];
