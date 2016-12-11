@@ -1,7 +1,10 @@
+% This script verifies if MATLAB-equation model given below as rhs lambda
+% corresponds to simulink model used in simulation.
+% This is done to be sure that we identified same model we simulate.
 model_prep
 
 x_0 = [0 0 0.1 0];
-sim('model_ver_model')
+sim('Wahadlo_model_ver')
 
 c = [M a];
 rhs = @(t,x) [ ...
