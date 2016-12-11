@@ -96,7 +96,9 @@ eksperymenty. Na podstawie odpowiedzi rzeczywistego systemu automatyczną metod�
 optymalizacji parametrycznej, dobrano parametry równań tak, aby odpowiedź
 modelu się z nią pokrywała.
 
-\subsection{Wahania swobodne z zablokowanym wózkiem}
+\subsection{Eksperymenty identyfikacyjne}
+
+\subsubsection{Wahania swobodne z zablokowanym wózkiem}
 
 Eksperyment polegał na zablokowaniu wózka ($x = const,\dot{x} = 0,
 \ddot{x} = 0$), wychyleniu wahadła z dolnego położenia równowagi
@@ -128,7 +130,7 @@ Przebieg drgań wahadła oraz odpowiedź modelu przedstawiono na rysunku
 
 \newpage
 
-\subsection{Wahania swobodne z niezablokowanym wózkiem}
+\subsubsection{Wahania swobodne z niezablokowanym wózkiem}
 
 W celu wyznaczenia pozostałych parametrów przeprowadzony został drugi
 eksperyment. Przebiegał podobnie jak poprzedni, jednak w jego trakcie wózek nie
@@ -164,25 +166,133 @@ trudności obliczeniowe, w ogóle nie zostało uwzględnione w modelu.
     \label{rys:idf1_wozek}
 \end{figure}
 
-\newpage
+\subsection{Zidentyfikowane parametry}
 
 Podsumowując identyfikację modelu zostały wyznaczone, zmierzone lub odczytane z
-tablic następujące parametry:
+tablic parametry zamieszczone w tabeli \ref{tab:parametry}.
 
 \begin{table}[!htb]
     \centering
-    \begin{tabular}{|l|l|}
+    \begin{tabular}{|l|l|l|}
         \hline
-        M & 0 \\
-        m & 0 \\
-        a & 0 \\
-        b & 0 \\
-        s & 0 \\
-        w & 0 \\
-        l & 0 \\
-        g & 0 \\
+        M & 0.44 & $[kg]$ \\
+        m & 0.2 & $[kg]$ \\
+        a & 292 & $[\frac{kg}{s}]$ \\
+        b & 0.0011 & $[\frac{kg\cdot m^2}{s}]$ \\
+        s & 200 & $[-]$ \\
+        w & 1.5 & $[-]$ \\
+        l & 0.447 & $[m]$ \\
+        g & 9.81 & $[\frac{m}{s^2}]$ \\[0.01cm]
         \hline
     \end{tabular}
+    \caption{Parametry modelu wyznaczone w ramach identyfikacji obiektu}
+    \label{tab:parametry}
 \end{table}
+
+\newpage
+
+\section{Regulator ciągły LQ}
+
+Aby przeprowadzić syntezę regulatora \textit{LQ} dla badanego systemu, należy go
+zlinearyzować w otoczeniu niestabilnego punktu równowagi ($\varphi = 0$). W tym
+celu użyto funkcji \textit{linearize} pakietu \textrm{MATLAB}, która potrafi
+zlinearyzować bloki \textrm{Simulink}-a.
+
+W celu zweryfikowania poprawności wyznaczonego systemu zlinearyzowanego,
+ręcznie wyznaczone zostały elementy macierzy $A$. Przykładowo pochodna
+pierwszego równania po $\dot{x}$ to $\frac{a}{M} = 665,7$.
+
+Macierz $A$ wyznaczona przez funkcję \textit{linearize} ma postać
+\eqref{equ:amatrix}.
+
+\begin{equation}
+    A = 
+    \begin{bmatrix}
+        0 & 1 & 0 & 0\\
+        0 & 665,7 & 4,47 & 0\\
+        0 & 0 & 0 & 1\\
+        0 & 1488,3 & 31,9 & 0\\
+    \end{bmatrix}
+    \label{equ:amatrix}
+\end{equation}
+
+Wektor wartości własnych macierzy $A$ ma postać \eqref{equ:amatrixeig1}.
+
+\begin{equation}
+    E_1 = 
+    \begin{bmatrix}
+              0\\
+      -665,6797\\
+        -4,6757\\
+         4,6907\\
+    \end{bmatrix}
+    \label{equ:amatrixeig1}
+\end{equation}
+
+Dla takiego problemu regulator LQ gwarantuje sterowanie optymalne względem
+wskaźnika jakości \eqref{equ:wskjak}.
+
+\begin{equation}
+    q = \int_{-\infty}^{\infty}(xQx^T + uRu^T)
+    \label{equ:wskjak}
+\end{equation}
+
+W celu wyznaczenia macierzy $K$ regulatora LQ przyjęto następujące macierze $Q$
+i $R$.
+
+\begin{equation}
+    Q = 
+    \begin{bmatrix}
+        0,1 & 0 & 0 & 0\\
+        0 & 0,001 & 0 & 0\\
+        0 & 0 & 1 & 0\\
+        0 & 0 & 0 & 1\\
+    \end{bmatrix}
+    \label{equ:lqq}
+\end{equation}
+
+\begin{equation}
+    R = 0,00001
+    \label{equ:lqr}
+\end{equation}
+
+Taka macierz $Q$ kładzie nacisk na zminimalizowanie wychylenia i prędkości
+wahadła, trochę mniejszy priorytet ma pozycja wózka, natomiast nie przykłada się
+do minimalizacji prędkości wózka, która sam w sobie jest stabilna. Macierze
+zostały dobrane na podstawie obserwacji wektora wartości własnych macierzy A,
+oraz zdrowego rozsądku.
+
+Taki system z zamkniętą pętlą sprzężenia zwrotnego, posiada wektor wartości
+własnych \eqref{equ:amatrixeig2}.
+
+\begin{equation}
+    E_1 = 
+    \begin{bmatrix}
+      -1742,6\\
+      -2,4 + 1,5i\\
+      -2,4 - 1,5i\\
+      -0,3\\
+    \end{bmatrix}
+    \label{equ:amatrixeig2}
+\end{equation}
+
+Zatem układ zamknięty będzie stabilny.
+
+\newpage
+
+Na rysunku \ref{rys:lq_response_model} widoczna jest odpowiedź modelu
+startującego z niezerowego wychylenia początkowego wahadła.
+
+\begin{figure}[!htb]
+    \begin{center}
+        \includegraphics[width=16cm,trim=3cm 9cm 3cm 9cm,clip]
+        {../res/img/lq_response_model.pdf}
+    \end{center}
+    \caption{Sterowanie i stan modelu w czasowej odpowiedzi regulowanego
+    systemu}
+    \label{rys:lq_response_model}
+\end{figure}
+
+
 
 \end{document}
