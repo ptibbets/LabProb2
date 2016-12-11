@@ -1,0 +1,74 @@
+\begin{tikzpicture}[scale=0.25]
+  \pgfmathsetmacro{\symscale}{1}
+  \pgfmathsetmacro{\segbaser}{60}
+  \pgfmathsetmacro{\segbaseR}{150}
+  \pgfmathsetmacro{\segmassr}{30}
+  \pgfmathsetmacro{\segbasewheelr}{30}
+  \pgfmathsetmacro{\segsticklen}{400}
+  
+  \def\segway at (#1,#2,#3){
+        
+    \coordinate (segbasecenter) at (#1,#2);
+          
+    % Draw ground
+    \draw[-{Latex[length=3mm,width=2mm]}]
+          (segbasecenter) ++(-\segbaseR*4 pt,-\segbaseR pt) -- 
+        ++(\segbaseR*8 pt,0) node[scale=\symscale,yshift=10pt]{$x$};
+    
+    % Draw base
+    \draw (segbasecenter) circle (\segbaser pt);
+          
+    % Draw engine force
+    \draw[-{Latex[length=3mm,width=2mm]}]
+          (segbasecenter) ++(-90pt,0) ++(-\segbaser-\segbaser*1.2 pt,0) --
+          ++(\segbaser*1.2 pt,0)
+          node[midway,scale=\symscale,yshift=10pt]{$f$};
+          
+    % Draw base friction
+    \draw[-{Latex[length=3mm,width=2mm]}]
+          (segbasecenter) ++(90pt,0) ++(\segbaser+\segbaser*1.2 pt,0) --
+        ++(-\segbaser*1.2 pt,0)
+          node[midway,scale=\symscale,yshift=10pt,xshift=5pt]{$-a\dot{x}$};
+      
+    % Draw base
+    \draw (segbasecenter) +(-150pt,-150pt) rectangle +(150pt,150pt);
+    \draw (segbasecenter) node[yshift=-25pt]{$M$};
+          
+    % Draw stick
+    \draw (segbasecenter) ++(-#3+90:\segbaser pt)         --
+          ++(-#3+90:\segsticklen pt)
+          node[midway,scale=\symscale,xshift=-10pt]{$l$} ++(-#3+90:\segmassr pt)
+          circle (\segmassr pt) node[scale=\symscale]{$m$};
+          
+    % Draw gravitational force
+    \draw[-{Latex[length=3mm,width=2mm]}]
+          (segbasecenter) ++(-#3+90:\segbaser + \segsticklen + \segmassr pt)
+          ++(0,\segmassr + \segmassr*2 pt) -- ++(0,-\segmassr*2 pt)
+          node[midway,scale=\symscale,xshift=12pt,yshift=5pt]{$mg$};
+          
+    % Draw stick torque
+    \draw[{Latex[length=3mm,width=2mm]}-]
+          (segbasecenter) ++(-#3+90:\segsticklen*0.9 pt)
+          arc[radius=\segsticklen*0.9 pt,start angle=-#3+90,end angle=-#3+90+10]
+          node[scale=\symscale,xshift=-5pt,yshift=12pt]{$-b\dot{\varphi}$};
+          
+    % Draw bearing friction
+    \draw[-{Latex[length=3mm,width=2mm]}]
+          (segbasecenter) ++(-#3+90-10:\segsticklen*0.9 pt)
+          arc[radius=\segsticklen*0.9 pt,start angle=-#3+90-10,end angle=-#3+90]
+          node[scale=\symscale,xshift=10pt,yshift=13pt]{$t$};
+          
+    % Draw angle base
+    \draw[dashed]
+          (segbasecenter) --
+        ++(90:\segsticklen*1.2 pt);
+          
+    % Draw angle
+    \draw[{Latex[length=3mm,width=2mm]}-]
+          (segbasecenter) ++(-#3+90:\segsticklen*0.5 pt)
+          arc[radius=\segsticklen*0.5 pt,start angle=-#3+90,end angle=90]
+          node[scale=\symscale,xshift=-10pt,yshift=8pt]{$\varphi$}; 
+  }
+  
+  \segway at (0,0,-20);
+\end{tikzpicture}

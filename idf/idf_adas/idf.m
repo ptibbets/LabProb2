@@ -13,7 +13,7 @@ l = copt_pend(1);
 a = 300;
 b = copt_pend(2);
 w = copt_pend(3);
-t = copt_pend(4);
+s = copt_pend(4);
 copt = [M a];
 
 % lb and ub
@@ -28,10 +28,13 @@ cart = -idf_full2.signals(4).values(3364:end);
 % Prepare rhs
 rhs = @(t,x,c) [ ...
     x(2,:); ...
-    (-m*l*l.*(x(4,:).^2).*sin(x(3,:)) + m*l*g.*sin(x(3,:)).*cos(x(3,:)) - b.*(tanh(t*x(4,:))*abs(x(4,:)).^w).*cos(x(3,:)) - c(2)*l.*x(2,:))./((c(1)+m)*l-m*l.*(cos(x(3,:)).^2)); ...
+    (-m*l*l.*(x(4,:).^2).*sin(x(3,:)) + m*l*g.*sin(x(3,:)).*cos(x(3,:)) - b.*(tanh(s*x(4,:))*abs(x(4,:)).^w).*cos(x(3,:)) - c(2)*l.*x(2,:))./((c(1)+m)*l-m*l.*(cos(x(3,:)).^2)); ...
     x(4,:); ...
     ((c(1)+m)*g.*sin(x(3,:)) - m*l.*(x(4,:).^2).*sin(x(3,:)).*cos(x(3,:)) - c(2).*x(2,:).*cos(x(3,:)) - ((c(1)+m)*b/(m*l)).*(tanh(t*x(4,:))*abs(x(4,:)).^w))./((c(1)+m)*l-m*l.*(cos(x(3,:)).^2)) ...
     ];
+
+% load('_pendulum_parameters')
+% copt = [M a];
 
 % Run opitmalization engine
 options = optimset('display', 'iter', 'maxiter', 1000);
@@ -43,8 +46,16 @@ a = copt(2);
 
 figure
 plot(time, x(:,1), time, cart)
+grid on
+xlabel('Czas [s]')
+ylabel('Pozycja wózka [m]')
+legend('Model','Obiekt rzeczywisty')
 figure
 plot(time, x(:,3), time, pend)
+grid on
+xlabel('Czas [s]')
+ylabel('K¹t wahad³a [rad]')
+legend('Model','Obiekt rzeczywisty')
 
 clear cart copt copt_pend idf_full2 lb ub options pend rhs rhsc time x
 save('_pendulum_parameters.mat')

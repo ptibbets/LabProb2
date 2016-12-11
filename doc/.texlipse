@@ -1,0 +1,14 @@
+#TeXlipse project settings
+#Sun Dec 11 13:28:07 CET 2016
+markTmpDer=true
+builderNum=2
+outputDir=
+makeIndSty=
+bibrefDir=
+outputFormat=pdf
+tempDir=tmp
+mainTexFile=main.tex
+outputFile=LabProb2.pdf
+langSpell=pl
+markDer=true
+srcDir=src/

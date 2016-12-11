@@ -1,0 +1,188 @@
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[12pt]{article}
+
+\usepackage{polski}
+\usepackage[polish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{datetime}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{amsmath}
+\usepackage{multirow}
+\usepackage{tabularx}
+\usepackage{geometry}
+\geometry{
+ 	a4paper, 
+ 	left    = 20mm,
+ 	right	= 20mm,
+ 	top     = 20mm,
+ 	bottom  = 20mm,
+}
+
+\usetikzlibrary{arrows.meta}
+ 
+%----------------------------------------------------------------------------------------
+ 
+%----------------------------------------------------------------------------------------
+% DATES
+%----------------------------------------------------------------------------------------
+
+\renewcommand{\dateseparator}{.}
+\newdate{exercise_date}{06}{12}{2016}
+
+%----------------------------------------------------------------------------------------
+
+%----------------------------------------------------------------------------------------
+% TIKZ PACKAGES
+%----------------------------------------------------------------------------------------
+
+\usetikzlibrary{arrows}
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+\input{spr_titlepage.tex}
+
+\section{Model matematyczny wahadła}
+
+Wahadło odwrócone, którego schemat znajduje się na rysunku \ref{rys:smodel},
+jest systemem nieliniowym. Model obiektu został wyprowadzony z wykorzystaniem
+metody \textit{Lagrange'a}. Wynikiem syntezy jest model dany równaniem
+\eqref{equ:model}.
+
+\begin{figure}[!htb] 
+  \begin{center}
+    \input{img/smodel.tex}
+    \caption{Schemat modelu wahadła}
+    \label{rys:smodel} 
+  \end{center}
+\end{figure}
+
+\begin{equation}
+    \begin{cases}
+    \ddot{x} = \frac{1}{R}\left[
+    -ml^2\dot{\varphi}^2\sin{\varphi}
+    +mlg\sin{\varphi}\cos{\varphi}
+    -b\dot{\varphi}\cos{\varphi}
+    -al\dot{x}
+    +lf
+    +t\cos{\varphi}\right] \\
+    
+    \ddot{\varphi} = \frac{1}{R}\left[
+    (M+m)g\sin{\varphi}
+    -ml\dot{\varphi}^2\sin{\varphi}\cos{\varphi}
+    -a\dot{x}\cos{\varphi}
+    -\frac{M+m}{ml}b\dot{\varphi}
+    +\frac{M+m}{ml}t
+    +f\cos{\varphi}\right]
+    \end{cases}
+    \label{equ:model}
+\end{equation}
+
+\begin{equation*}
+    R = Ml + ml(1 - \cos^2{\varphi})
+\end{equation*}
+
+\newpage
+
+\section{Identyfikacja modelu}
+
+W celu wyznaczenia nieznanych współczynników równań modelu, przeprowadzono dwa
+eksperymenty. Na podstawie odpowiedzi rzeczywistego systemu automatyczną metodą
+optymalizacji parametrycznej, dobrano parametry równań tak, aby odpowiedź
+modelu się z nią pokrywała.
+
+\subsection{Wahania swobodne z zablokowanym wózkiem}
+
+Eksperyment polegał na zablokowaniu wózka ($x = const,\dot{x} = 0,
+\ddot{x} = 0$), wychyleniu wahadła z dolnego położenia równowagi
+($\varphi_0=\pi$), uwolnieniu wahadła i obserwacji powstałych drgań.
+
+Podczas identyfikacji pojawiły się znaczne rozbieżności w kształcie obwiedni
+przebiegu kąta. Aby lepiej dopasować odpowiedź rzeczywistą do odpowiedzi modelu,
+zmieniono charakter tarcia łożyskowania wahadła zgodnie z przekształceniem
+\eqref{equ:friction}.\\
+
+\begin{equation}
+    -\frac{M+m}{ml}b\dot{\varphi} \rightarrow
+    -\frac{M+m}{ml}b\tanh(s\dot{\varphi})|\dot{\varphi}|^w
+    \label{equ:friction}
+\end{equation}\\
+
+Przebieg drgań wahadła oraz odpowiedź modelu przedstawiono na rysunku
+\ref{rys:idf_pend1}.
+
+\begin{figure}[!htb]
+    \begin{center}
+        \includegraphics[width=16cm,trim=3cm 9cm 3cm 9cm,clip]
+        {../res/img/idf_pend1.pdf}
+    \end{center}
+    \caption{Przebieg kąta wahadła w czasie dla swobodnych drgań z zablokowanym
+    wózkiem} 
+    \label{rys:idf_pend1}
+\end{figure}
+
+\newpage
+
+\subsection{Wahania swobodne z niezablokowanym wózkiem}
+
+W celu wyznaczenia pozostałych parametrów przeprowadzony został drugi
+eksperyment. Przebiegał podobnie jak poprzedni, jednak w jego trakcie wózek nie
+był zablokowany.
+
+Przebieg drgań wahadła przedstawiono na rysunku \ref{rys:idf1_wahadlo},
+pozycja wózka natomiast znajduje się na rysunku \ref{rys:idf1_wozek}.
+
+\begin{figure}[!htb]
+    \begin{center}
+        \includegraphics[width=16cm,trim=3cm 9cm 3cm 9cm,clip]
+        {../res/img/idf1_wahadlo.pdf}
+    \end{center}
+    \caption{Przebieg kąta wahadła w czasie dla swobodnych drgań z
+    niezablokowanym wózkiem} 
+    \label{rys:idf1_wahadlo}
+\end{figure}
+
+\newpage
+
+Rozbieżność spoczynkowej pozycji pomiędzy odpowiedzią rzeczywistą wózka a
+odpowiedzią modelu wynika prawdopodobnie z dwóch przyczyn. Po pierwsze przyjęty
+model tarcia nie odpowiada dokładnie rzeczywistemu tarciu dynamicznemu wózka,
+ponadto w obiekcie rzeczywistym występuje tarcie statyczne, które z uwagi na
+trudności obliczeniowe, w ogóle nie zostało uwzględnione w modelu.
+
+\begin{figure}[!htb]
+    \begin{center}
+        \includegraphics[width=16cm,trim=3cm 9cm 3cm 9cm,clip]
+        {../res/img/idf1_wozek.pdf}
+    \end{center}
+    \caption{Przebieg pozycji wózka w czasie dla swobodnych drgań wahadła} 
+    \label{rys:idf1_wozek}
+\end{figure}
+
+\newpage
+
+Podsumowując identyfikację modelu zostały wyznaczone, zmierzone lub odczytane z
+tablic następujące parametry:
+
+\begin{table}[!htb]
+    \centering
+    \begin{tabular}{|l|l|}
+        \hline
+        M & 0 \\
+        m & 0 \\
+        a & 0 \\
+        b & 0 \\
+        s & 0 \\
+        w & 0 \\
+        l & 0 \\
+        g & 0 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\end{document}
