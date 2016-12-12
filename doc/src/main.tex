@@ -262,6 +262,17 @@ do minimalizacji prędkości wózka, która sama w sobie jest stabilna. Macierze
 zostały dobrane na podstawie obserwacji wektora wartości własnych macierzy A,
 oraz zdrowego rozsądku.
 
+Macierz sterowania $K$ została wyznaczona przy pomocy funkcji \textit{lqr}
+pakietu \textrm{MATLAB} i ma postać \ref{equ:kmatrix}.
+
+\begin{equation}
+    K = 
+    \begin{bmatrix}
+      -100,0 & -642,9 & 1843,7 & 500,1\\
+    \end{bmatrix}
+    \label{equ:kmatrix}
+\end{equation}
+
 System z zamkniętą pętlą sprzężenia zwrotnego, posiada wektor wartości
 własnych \eqref{equ:amatrixeig2}.
 
@@ -281,8 +292,9 @@ będzie stabilny w okolicy punktu linearyzacji.
 
 \newpage
 
-Na rysunku \ref{rys:lq_response_model} widoczna jest odpowiedź modelu
-startującego z niezerowego wychylenia początkowego wahadła.
+Na rysunku \ref{rys:lq_response_model} widoczna jest odpowiedź systemu z
+zamkniętą pętlą sprzężenia zwrotnego, startującego z niezerowego wychylenia
+początkowego wahadła.
 
 \begin{figure}[!htb]
     \begin{center}
