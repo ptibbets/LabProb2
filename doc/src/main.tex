@@ -262,7 +262,7 @@ do minimalizacji prędkości wózka, która sama w sobie jest stabilna. Macierze
 zostały dobrane na podstawie obserwacji wektora wartości własnych macierzy A,
 oraz zdrowego rozsądku.
 
-Taki system z zamkniętą pętlą sprzężenia zwrotnego, posiada wektor wartości
+System z zamkniętą pętlą sprzężenia zwrotnego, posiada wektor wartości
 własnych \eqref{equ:amatrixeig2}.
 
 \begin{equation}
@@ -276,7 +276,8 @@ własnych \eqref{equ:amatrixeig2}.
     \label{equ:amatrixeig2}
 \end{equation}
 
-Zatem układ zamknięty będzie stabilny.
+Ponieważ wszystkie wartości własne posiadają ujemne części rzeczywiste, system
+będzie stabilny w okolicy punktu linearyzacji.
 
 \newpage
 
@@ -297,11 +298,33 @@ startującego z niezerowego wychylenia początkowego wahadła.
 
 \section{Swing-up wahadła}
 
-Niestety na tę część zabrakło nam czasu.
+Procedura swing-up została jedynie zasymulowana. Algorytm procedury wygląda
+następująco:
+
+\begin{enumerate}
+  \item Jeśli $|\dot{\varphi}| < \alpha$, zmień sterowanie na przeciwne
+  \item Jeśli $|\varphi - \pi| > \frac{\pi}{2}$ wymuś zmianę znaku sterowania
+  \item Jeśli wahadło zbliża się do stanu $\varphi = \pi$ ($\varphi > \pi,
+  \dot{\varphi} < 0$ lub $\varphi < \pi, \dot{\varphi} > 0$) wymuś sterowanie
+  $u = 0$
+\end{enumerate}
+
+Przebieg czasowy stanu wahadła podczas procedury swing-up przedstawiono na
+rysunku \ref{rys:swingup}.
+
+\begin{figure}[!htb]
+    \begin{center}
+        \includegraphics[width=16cm,trim=3cm 9cm 3cm 9cm,clip]
+        {../res/img/swingup.pdf}
+    \end{center}
+    \caption{Przebieg procedury swing-up oraz przełączenie na regulator LQ}
+    \label{rys:swingup}
+\end{figure}
 
 \newpage
 
 \section{Wnioski}
+
 
 
 \end{document}
