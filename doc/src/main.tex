@@ -325,6 +325,26 @@ rysunku \ref{rys:swingup}.
 
 \section{Wnioski}
 
+Synteza regulatora dla obektu rzeczywistego jest procesem złożonym. Osoba
+odpowiedzialna za dobranie typu i nastaw sterownika, musi wziąć pod uwagę szereg
+czynników niewystępujących w idealnym świecie symulacji. Ograniczenia
+sterowania, czy skokowy charakter tarcia statycznego skutecznie utrudniają
+syntezę regulatora systemu rzeczywistego.
 
+Pomimo rozbieżności modelu i fizycznego systemu wahadła, dobrze dobrane nastawy
+regulatora kompensują niedokładności pomiarowe czy koncepcyjne. Układ regulacji
+powinien być zaprojektowany tak, aby jego stabilność jak najmniej zależała od
+parametrów modelu, wtedy sterownik nie będzie wymagał częstej obsługi,
+niezbędnej z uwagi na zmiany parametrów obiektu wraz z upływem czasu.
+
+Największą trudność w ramach identyfikacji wahadła sprawiło dobranie
+prawidłowego modelu tarcia. Przyjęty model nie odpowiadał dokładnie zebranym
+pomiarom, pozwolił jednak dostatecznie przybliżyć rzeczywiste zachowanie wahadła
+na tyle dobrze, że zsyntezowany regulator był w stanie ustabilizować naturalnie
+niestabilny obiekt.
+
+Przyjęty algorytm swing-up prawidłowo przeprowadza stan modelu wahadła ze
+stabilnego punktu równowagi do punktu niestabilnego. Niestety zabrakło czasu na
+przetestowanie jego zachowania w środowisku rzeczywistym.
 
 \end{document}
